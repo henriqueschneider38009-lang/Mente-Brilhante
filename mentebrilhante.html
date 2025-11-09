@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mente Brilhante - Aprender é brincar, brincar é criar</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+    body{background:#f7fafc;color:#333;scroll-behavior:smooth}
+    header{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;text-align:center;padding:44px 18px}
+    header h1{font-size:2.1rem;margin-bottom:6px} header p{font-size:1.02rem;font-style:italic}
+    nav{background:#0078ff;display:flex;justify-content:center;gap:20px;padding:10px 0}
+    nav a{color:#fff;text-decoration:none;font-weight:600}
+    section{padding:36px 18px;max-width:1000px;margin:auto}
+    .intro{text-align:center;margin-bottom:26px}
+    .intro h2{font-size:1.6rem;color:#0078ff;margin-bottom:6px}
+    .caixas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .caixa{background:#fff;border-radius:12px;box-shadow:0 6px 12px rgba(0,0,0,.06);padding:16px;text-align:center;transition:transform .22s}
+    .caixa:hover{transform:scale(1.03)}
+    .caixa img{width:100%;height:170px;margin-bottom:10px;object-fit:cover;border-radius:8px}
+    .caixa h3{color:#0078ff;margin-bottom:8px}
+    .caixa p{font-size:.95rem;margin-bottom:8px}
+    .preco{font-weight:700;color:#333;margin-top:6px}
+    .botao{background:#0078ff;color:#fff;border:none;border-radius:10px;padding:8px 14px;margin-top:8px;cursor:pointer;transition:transform .15s}
+    .botao:hover{transform:translateY(-3px);background:#005fcc}
+    .carrinho{background:#eaf6ff;border-radius:12px;padding:18px;margin-top:20px;text-align:center}
+    .carrinho h3{color:#0078ff;margin-bottom:6px}
+    .total{font-size:1.02rem;font-weight:700;color:#333;margin-top:8px}
+    .detalhe-frete{font-size:.95rem;color:#333;margin-top:6px}
+    .fade{opacity:0;transition:opacity .6s ease}
+    .fade.show{opacity:1}
+    /* confirmation area */
+    #confirmacao{display:none;padding:18px 16px}
+    .bloco{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 12px rgba(0,0,0,.06);max-width:760px;margin:12px auto}
+    #confirmacao h1{color:#0078ff;margin-bottom:8px;text-align:center}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .input-end{padding:8px;border-radius:8px;border:1px solid #ccc;width:100%;box-sizing:border-box}
+    .resultado-frete{font-weight:700;color:#0078ff;margin-top:8px}
+    .pagamentos{margin-top:12px}
+    .pagamentos label{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+    .btn-confirm{display:block;margin:12px auto 0;padding:10px 18px;border-radius:10px;border:none;background:#0078ff;color:#fff;cursor:pointer}
+    .btn-confirm:hover{background:#005fcc}
+    .mensagem-sucesso{color:green;font-weight:700;margin-top:12px;text-align:center}
+    /* painel de pagamento (simulado) */
+    #painel-pagamento{display:none;padding:16px;max-width:640px;margin:12px auto;background:#fff;border-radius:12px;box-shadow:0 6px 12px rgba(0,0,0,.06)}
+    #painel-pagamento h3{color:#0078ff;margin-bottom:8px;text-align:center}
+    .link-pag{background:#f4f8ff;padding:10px;border-radius:8px;border:1px dashed #0078ff;word-break:break-all}
+    .pay-btn{display:block;margin:12px auto 0;padding:10px 14px;border-radius:10px;border:none;background:#00b050;color:#fff;cursor:pointer}
+    .pay-btn:hover{opacity:.95}
+    /* final */
+    #confirmacao-final{display:none;padding:18px 16px}
+    /* responsive */
+    @media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}.caixa img{height:140px}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mente Brilhante</h1>
+    <p>Aprender é brincar, brincar é criar</p>
+  </header>
+
+  <nav>
+    <a href="#caixas">Caixas</a>
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+
+  <!-- LOJA -->
+  <section id="loja" class="fade show">
+    <div class="intro" id="caixas">
+      <h2>Nossas Caixas Educativas</h2>
+      <p>Cada caixa Mente Brilhante traz um novo jeito de aprender brincando!</p>
+    </div>
+
+    <div class="caixas">
+      <!-- Pensar (foto realista: quebra-cabeças / blocos lógicos) -->
+      <div class="caixa" data-name="Caixa Pensar" data-price="71.25">
+        <img src="https://source.unsplash.com/800x600/?puzzle,blocks,learning" alt="Pensar - quebra-cabeças e blocos">
+        <h3>Caixa Pensar</h3>
+        <p>Atividades de lógica e raciocínio para desenvolver concentração.</p>
+        <p class="preco">R$ 71,25</p>
+        <button class="botao adicionar">Adicionar ao carrinho</button>
+      </div>
+
+      <!-- Criar (foto realista: materiais de arte) -->
+      <div class="caixa" data-name="Caixa Criar" data-price="71.25">
+        <img src="https://source.unsplash.com/800x600/?art,painting,crafts" alt="Criar - materiais de arte">
+        <h3>Caixa Criar</h3>
+        <p>Materiais artísticos e oficinas para estimular a imaginação.</p>
+        <p class="preco">R$ 71,25</p>
+        <button class="botao adicionar">Adicionar ao carrinho</button>
+      </div>
+
+      <!-- Inventar (foto realista: experimentos / kits ciência) -->
+      <div class="caixa" data-name="Caixa Inventar" data-price="71.25">
+        <img src="https://source.unsplash.com/800x600/?science,experiment,kids" alt="Inventar - experimentos e kits">
+        <h3>Caixa Inventar</h3>
+        <p>Experimentos simples e seguros para despertar curiosidade científica.</p>
+        <p class="preco">R$ 71,25</p>
+        <button class="botao adicionar">Adicionar ao carrinho</button>
+      </div>
+
+      <!-- Brincar (foto realista: brinquedos educativos) -->
+      <div class="caixa" data-name="Caixa Brincar" data-price="71.25">
+        <img src="https://source.unsplash.com/800x600/?toys,educational,play" alt="Brincar - brinquedos educativos">
+        <h3>Caixa Brincar</h3>
+        <p>Jogos e dinâmicas para socialização e aprendizado em grupo.</p>
+        <p class="preco">R$ 71,25</p>
+        <button class="botao adicionar">Adicionar ao carrinho</button>
+      </div>
+    </div>
+
+    <div class="carrinho">
+      <h3>🛒 Carrinho</h3>
+      <p id="itens-carrinho">Nenhum item adicionado ainda.</p>
+      <p class="total" id="subtotal">Subtotal: R$ 0,00</p>
+      <p class="detalhe-frete" id="detalhe-frete">Frete: — (calcule o frete na confirmação)</p>
+      <p class="total" id="total-geral">Total: R$ 0,00</p>
+      <button class="botao" id="finalizar">Finalizar compra</button>
+    </div>
+  </section>
+
+  <!-- CONFIRMAÇÃO (mesmo arquivo) -->
+  <section id="confirmacao" class="fade">
+    <h1>Confirme seus dados de envio</h1>
+
+    <div class="bloco">
+      <form id="form-envio">
+        <div style="margin-bottom:8px">
+          <label for="nome">Nome completo *</label>
+          <input id="nome" class="input-end" type="text" placeholder="Seu nome completo" required>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px">
+          <div>
+            <label for="cep">CEP *</label>
+            <input id="cep" class="input-end" type="text" placeholder="CEP (apenas números)" maxlength="9" required>
+          </div>
+          <div>
+            <label for="numero">Número *</label>
+            <input id="numero" class="input-end" type="text" placeholder="Número" required>
+          </div>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <label for="rua">Rua *</label>
+          <input id="rua" class="input-end" type="text" placeholder="Nome da rua" required>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <label for="bairro">Bairro *</label>
+          <input id="bairro" class="input-end" type="text" placeholder="Bairro" required>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px">
+          <div>
+            <label for="cidade">Cidade *</label>
+            <input id="cidade" class="input-end" type="text" placeholder="Cidade" required>
+          </div>
+          <div>
+            <label for="estado">Estado (UF) *</label>
+            <input id="estado" class="input-end" type="text" placeholder="Estado (ex: ES)" maxlength="2" required>
+          </div>
+        </div>
+
+        <div style="margin-top:6px">
+          <button type="button" class="botao" id="calcular-frete">Calcular frete</button>
+          <div class="resultado-frete" id="resultado-frete-pedido"></div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bloco" style="margin-top:12px">
+      <h3>Resumo do pedido</h3>
+      <p id="itens-confirmacao">Caixas: —</p>
+      <p id="subtotal-confirmacao">Subtotal: R$ 0,00</p>
+      <p id="frete-confirmacao">Frete: —</p>
+      <p id="total-confirmacao" style="font-weight:800">Total: R$ 0,00</p>
+
+      <div style="margin-top:12px" class="pagamentos">
+        <h4>Escolha o método de pagamento *</h4>
+        <label><input type="radio" name="pagamento" value="PIX"> PIX</label>
+        <label><input type="radio" name="pagamento" value="Transferência"> Transferência bancária</label>
+        <label><input type="radio" name="pagamento" value="Cartão"> Cartão de débito/crédito</label>
+
+        <button class="btn-confirm" id="ir-para-pagamento">Ir para pagamento</button>
+        <div class="mensagem-sucesso" id="mensagem-final"></div>
+      </div>
+    </div>
+
+    <div id="painel-pagamento">
+      <h3>Painel de pagamento (simulado)</h3>
+      <p>Link de pagamento (fictício):</p>
+      <div class="link-pag" id="link-pagamento-text"></div>
+      <button class="pay-btn" id="pagar-agora">Pagar agora (simulado)</button>
+    </div>
+
+    <div style="text-align:center;margin-top:12px">
+      <button class="botao" id="voltar">Voltar à loja</button>
+    </div>
+  </section>
+
+  <!-- CONFIRMAÇÃO FINAL VISUAL (mensagem) -->
+  <section id="confirmacao-final" class="fade">
+    <div class="bloco">
+      <h1>🎉 Pagamento confirmado!</h1>
+      <div id="resumo-final"></div>
+      <div style="text-align:center;margin-top:12px">
+        <button class="botao" id="voltar-loja-final">Voltar à loja</button>
+      </div>
+    </div>
+  </section>
+
+  <footer style="margin-top:18px">
+    <p style="text-align:center;color:#fff;background:#0078ff;padding:12px;border-radius:6px;max-width:1000px;margin:12px auto">© 2025 Mente Brilhante | Projeto Escolar</p>
+  </footer>
+
+  <script>
+    // Estado do carrinho e frete do pedido
+    let itens = [];
+    let subtotal = 0;
+    let orderFrete = null; // null até calculado
+    let totalGeral = 0;
+
+    const fmt = v => Number(v).toFixed(2).replace('.',',');
+
+    // Atualiza exibição do carrinho principal
+    function atualizarCarrinho() {
+      document.getElementById('itens-carrinho').textContent = itens.length ? itens.join(', ') : 'Nenhum item adicionado ainda.';
+      document.getElementById('subtotal').textContent = `Subtotal: R$ ${fmt(subtotal)}`;
+      if (orderFrete === null) {
+        document.getElementById('detalhe-frete').textContent = 'Frete: — (calcule o frete na confirmação)';
+        totalGeral = subtotal;
+      } else {
+        document.getElementById('detalhe-frete').textContent = `Frete: R$ ${fmt(orderFrete)}`;
+        totalGeral = subtotal + orderFrete;
+      }
+      document.getElementById('total-geral').textContent = `Total: R$ ${fmt(totalGeral)}`;
+    }
+
+    // Adicionar produto
+    document.querySelectorAll('.adicionar').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const card = this.closest('.caixa');
+        const nome = card.dataset.name;
+        const preco = parseFloat(card.dataset.price);
+        itens.push(nome);
+        subtotal += preco;
+        atualizarCarrinho();
+      });
+    });
+
+    // Função fade
+    function fadeOutIn(sairEl, entrarEl) {
+      sairEl.classList.remove('show');
+      setTimeout(() => {
+        sairEl.style.display = 'none';
+        entrarEl.style.display = 'block';
+        setTimeout(() => entrarEl.classList.add('show'), 50);
+      }, 600);
+    }
+
+    // Finalizar compra -> exibe confirmacao com formulário
+    document.getElementById('finalizar').addEventListener('click', () => {
+      if (itens.length === 0) { alert('Adicione algo ao carrinho antes de finalizar!'); return; }
+      // preenche resumo preliminar (sem frete)
+      document.getElementById('itens-confirmacao').textContent = `Caixas: ${itens.join(', ')}`;
+      document.getElementById('subtotal-confirmacao').textContent = `Subtotal: R$ ${fmt(subtotal)}`;
+      document.getElementById('frete-confirmacao').textContent = `Frete: —`;
+      document.getElementById('total-confirmacao').textContent = `Total: R$ ${fmt(subtotal)}`;
+      // esconde painel de pagamento caso ativo
+      document.getElementById('painel-pagamento').style.display = 'none';
+      document.getElementById('mensagem-final').textContent = '';
+      document.getElementById('resultado-frete-pedido').textContent = '';
+      // mostra tela de confirmação
+      const loja = document.getElementById('loja');
+      const confirm = document.getElementById('confirmacao');
+      fadeOutIn(loja, confirm);
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    // Voltar à loja: reseta tudo
+    function resetTudo() {
+      itens = [];
+      subtotal = 0;
+      orderFrete = null;
+      totalGeral = 0;
+      document.querySelectorAll('.resultado-frete').forEach(el => el.textContent = '');
+      document.getElementById('mensagem-final').textContent = '';
+      document.getElementById('form-envio').reset();
+      document.querySelectorAll('input[name="pagamento"]').forEach(i => i.checked = false);
+      document.getElementById('painel-pagamento').style.display = 'none';
+      document.getElementById('confirmacao-final').style.display = 'none';
+      atualizarCarrinho();
+    }
+
+    document.getElementById('voltar').addEventListener('click', () => {
+      const loja = document.getElementById('loja');
+      const confirm = document.getElementById('confirmacao');
+      fadeOutIn(confirm, loja);
+      resetTudo();
+    });
+
+    // Calcular frete (após validação do formulário de envio)
+    document.getElementById('calcular-frete').addEventListener('click', () => {
+      const nome = document.getElementById('nome').value.trim();
+      const cep = document.getElementById('cep').value.trim().replace(/\D/g,'');
+      const rua = document.getElementById('rua').value.trim();
+      const numero = document.getElementById('numero').value.trim();
+      const bairro = document.getElementById('bairro').value.trim();
+      const cidade = document.getElementById('cidade').value.trim();
+      const estado = document.getElementById('estado').value.trim();
+
+      if (!nome || !cep || !rua || !numero || !bairro || !cidade || !estado) {
+        alert('Por favor, preencha todos os campos de envio antes de calcular o frete.');
+        return;
+      }
+
+      if (cep.length < 8) { alert('CEP inválido. Digite pelo menos 8 dígitos.'); return; }
+
+      // gera frete aleatório entre 10 e 25
+      const valor = (Math.random() * (25 - 10) + 10);
+      orderFrete = Number(valor.toFixed(2));
+      totalGeral = subtotal + orderFrete;
+
+      // atualiza UI
+      document.getElementById('resultado-frete-pedido').textContent = `Frete estimado: R$ ${fmt(orderFrete)}`;
+      document.getElementById('frete-confirmacao').textContent = `Frete: R$ ${fmt(orderFrete)}`;
+      document.getElementById('total-confirmacao').textContent = `Total: R$ ${fmt(totalGeral)}`;
+      document.getElementById('detalhe-frete').textContent = `Frete: R$ ${fmt(orderFrete)}`;
+      document.getElementById('total-geral').textContent = `Total: R$ ${fmt(totalGeral)}`;
+    });
+
+    // Ir para pagamento (gera link fictício e mostra painel de pagamento na mesma página)
+    document.getElementById('ir-para-pagamento').addEventListener('click', () => {
+      const elMsg = document.getElementById('mensagem-final');
+      elMsg.textContent = '';
+      if (orderFrete === null) {
+        elMsg.style.color = 'red';
+        elMsg.textContent = 'Por favor, calcule o frete antes de ir para o pagamento.';
+        return;
+      }
+      if (itens.length === 0) {
+        elMsg.style.color = 'red';
+        elMsg.textContent = 'Carrinho vazio.';
+        return;
+      }
+      const escolha = document.querySelector('input[name="pagamento"]:checked');
+      if (!escolha) {
+        elMsg.style.color = 'red';
+        elMsg.textContent = 'Escolha um método de pagamento.';
+        return;
+      }
+
+      const metodo = escolha.value;
+      let url;
+      if (metodo === 'PIX') url = 'https://mente-brilhante.com/pagamento-pix';
+      else if (metodo === 'Transferência') url = 'https://mente-brilhante.com/pagamento-transferencia';
+      else url = 'https://mente-brilhante.com/pagamento-cartao';
+
+      document.getElementById('link-pagamento-text').textContent = url;
+      document.getElementById('painel-pagamento').style.display = 'block';
+      document.getElementById('painel-pagamento').scrollIntoView({behavior:'smooth',block:'center'});
+    });
+
+    // Simular pagamento quando clica "Pagar agora"
+    document.getElementById('pagar-agora').addEventListener('click', () => {
+      const nome = document.getElementById('nome').value.trim();
+      const cep = document.getElementById('cep').value.trim();
+      const rua = document.getElementById('rua').value.trim();
+      const numero = document.getElementById('numero').value.trim();
+      const bairro = document.getElementById('bairro').value.trim();
+      const cidade = document.getElementById('cidade').value.trim();
+      const estado = document.getElementById('estado').value.trim();
+      const escolha = document.querySelector('input[name="pagamento"]:checked').value;
+      const resumoEl = document.getElementById('resumo-final');
+
+      const resumoHTML = `
+        <p><strong>Método:</strong> ${escolha} (link de pagamento simulado mostrado anteriormente)</p>
+        <p><strong>Itens:</strong> ${itens.join(', ')}</p>
+        <p><strong>Subtotal:</strong> R$ ${fmt(subtotal)} • <strong>Frete:</strong> R$ ${fmt(orderFrete)} • <strong>Total:</strong> R$ ${fmt(totalGeral)}</p>
+        <p style="margin-top:8px"><strong>Dados de envio:</strong><br>
+        ${nome} — ${rua}, ${numero} — ${bairro} — ${cidade}/${estado} — CEP: ${cep}</p>
+        <p style="margin-top:10px;color:green;font-weight:700;text-align:center">Pagamento confirmado (simulado). Obrigado pela compra!</p>
+      `;
+      resumoEl.innerHTML = resumoHTML;
+
+      const confirm = document.getElementById('confirmacao');
+      const final = document.getElementById('confirmacao-final');
+      fadeOutIn(confirm, final);
+
+      document.getElementById('pagar-agora').disabled = true;
+    });
+
+    // Voltar ao início (após confirmação final)
+    document.getElementById('voltar-loja-final').addEventListener('click', () => {
+      const final = document.getElementById('confirmacao-final');
+      const loja = document.getElementById('loja');
+      fadeOutIn(final, loja);
+      resetTudo();
+      setTimeout(()=>{ document.getElementById('loja').classList.add('show') }, 100);
+    });
+
+    // inicializa
+    atualizarCarrinho();
+  </script>
+
+</body>
+</html>
